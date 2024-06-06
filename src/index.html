@@ -1,15 +1,30 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="output.css">
-  <link href="/dist/main.css" rel="stylesheet">
-</head>
-<body>
-  <h1 class="text-center p-20">
-    Webpack with Tailwind SssS
-    <script src="./index.js"></script>
-  </h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/output.css" />
+  </head>
+  <body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+    <section class="md:container mx-auto p-3">
+      <header class="flex flex-col items-center gap-3">
+        <h1 class="text-headerSize uppercase text-mainFontColor ">
+          just do it!
+        </h1>
+        <form class="w-full flex justify-center" action="" method="get">
+          <input id="input_value" class="w-full max-w-4xl px-2" type="text" name="text" />
+          <button
+            id="set_input_button"
+            class="px-4 py-2 font-bold uppercase text-mainFontColor text-nowrap bg-orange-500 hover:bg-purple-500 transition-colors"
+            type="submit"
+          >
+            do it
+          </button>
+        </form>
+      </header>
+      <ul id="task-manage" class="flex flex-col gap-1 pt-5" ></ul>
+    </section>
+    <script src="./script/index.js" type="module"></script>
+  </body>
 </html>
