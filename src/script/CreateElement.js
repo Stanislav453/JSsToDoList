@@ -24,6 +24,7 @@ export const CreateElement = () => {
       check,
       trash,
       buttonContainer,
+      taskManage
     };
   };
 
