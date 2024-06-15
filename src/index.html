@@ -12,7 +12,8 @@
         <h1 class="text-headerSize uppercase text-mainFontColor ">
           just do it!
         </h1>
-        <form class="w-full max-w-4xl flex justify-center" action="" method="get">
+        <form class="relative w-full max-w-4xl flex justify-center" action="" method="get">
+          <p id="inpurError" class="absolute top-inputErrorPosition left-0 text-rose-600 drop-shadow" ></p>
           <input id="input_value" class="w-full max-w-4xl px-2" type="text" name="text" />
           <button
             id="set_input_button"
@@ -27,8 +28,9 @@
         <ul id="task-manage" class="flex flex-col gap-1 pt-5" ></ul>
         <h3 id="task-done-title" class="text-white font-bold capitalize pt-5 pb-2"></h3>
         <ul id="task-done" ></ul>
+        <p id="time" class="w-full text-timeSize text-center text-white">time</p>
       </article>
     </section>
-    <script src="./script/index.js" type="module"></script>
+    <!-- <script src="./script/index.js" type="module"></script> -->
   </body>
 </html>
