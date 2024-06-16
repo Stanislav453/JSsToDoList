@@ -10,7 +10,6 @@ const todo = (function () {
 
   let inputResult = "";
   let taskList = JSON.parse(localStorage.getItem("taskList")) || [];
-  const todoListTask = [];
   const doneTodoList = [];
   const { addElement, appendElement } = CreateElement();
 
@@ -20,55 +19,80 @@ const todo = (function () {
 
   setInputButton.addEventListener("click", (e) => {
     e.preventDefault();
-    const elements = addElement();
     if (!/^[a-zA-Z0-9]*$/g.test(inputValue.value)) {
       inputResult = "";
       inputValue.value = "";
       inputError.textContent = "A task can contain only letters and numbers";
     } else {
       inputError.textContent = "";
-      // localStorage.setItem("taskList", JSON.stringify(todoListTask));
     }
     if (inputResult.trim() === "") return;
 
-    elements.newLi.innerHTML = inputResult;
-    appendElement(elements);
-    taskList.push(elements.newLi.outerHTML);
-    localStorage.setItem("taskList", JSON.stringify(taskList));
-
-    elements.treshButton.addEventListener("click", () => {
-      const index = doneTodoList.indexOf(elements.newLi);
-      if (index !== -1) {
-        doneTodoList.splice(index, 1);
-      }
-      elements.newLi.parentNode.removeChild(elements.newLi);
-      UpdateTaskDoneTitle(doneTodoList);
-    });
-
-    elements.checkButton.addEventListener("click", () => {
-      elements.newLi.classList.add("opacity-25");
-      doneTodoList.push(elements.newLi);
-
-      doneTodoList.map((oneTask, index) => {
-        taskDone.appendChild(oneTask);
-      });
-      elements.checkButton.parentNode.removeChild(elements.checkButton);
-
-      UpdateTaskDoneTitle(doneTodoList);
-    });
+    addTask(inputResult);
+    loadTask();
 
     inputResult = "";
     inputValue.value = "";
   });
-  taskList.map((item, key) => {
+
+  // Function to add a task
+  function addTask(taskContent, index) {
+    const taskId = Date.now()
     const elements = addElement();
-    elements.newLi.innerHTML = item;
-    return appendElement(elements);
-  });
+    taskList.push({ id:taskId, taskName: taskContent});
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+
+    elements.treshButton.addEventListener("click", () => {
+      removeTask(elements.newLi, taskList.id);
+    });
+
+    elements.checkButton.addEventListener("click", () => {
+      markTaskAsDone(elements.newLi, elements.checkButton);
+    });
+  }
+
+  // Function to remove a task
+  function removeTask(taskElement, taskContent) {
+    taskList = taskList.filter((item) => item.id !== taskContent);
+      localStorage.setItem("taskList", JSON.stringify(taskList));
+        taskElement.parentNode.removeChild(taskElement);
+        UpdateTaskDoneTitle(doneTodoList);
+  }
+
+  // Function to mark a task as done
+  function markTaskAsDone(taskElement, checkButton) {
+    taskElement.classList.add("opacity-25");
+    doneTodoList.push(taskElement);
+    taskDone.appendChild(taskElement);
+    checkButton.parentNode.removeChild(checkButton);
+    UpdateTaskDoneTitle(doneTodoList);
+  }
+
+  // Load tasks from localStorage
+  const loadTask = () => {
+    taskList.forEach((task) => {
+      const elements = addElement();
+      elements.newLi.innerHTML = task.taskName;
+      appendElement(elements);
+  
+      elements.treshButton.addEventListener("click", () => {
+        removeTask(elements.newLi, task.id);
+      });
+  
+      elements.checkButton.addEventListener("click", () => {
+        markTaskAsDone(elements.newLi, elements.checkButton);
+      });
+    });
+
+  }
 
   if (!localStorage.getItem("taskList")) {
     localStorage.setItem("taskList", JSON.stringify([]));
   }
 
+  loadTask()
+  
   DateOnWebsite();
 })();
+
+// localStorage.clear()
