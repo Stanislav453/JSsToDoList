@@ -19,7 +19,7 @@ const todo = (function () {
 
   setInputButton.addEventListener("click", (e) => {
     e.preventDefault();
-    if (!/^[a-zA-Z0-9]*$/g.test(inputValue.value)) {
+    if (!/^[a-zA-Z0-9 ]*$/g.test(inputValue.value)) {
       inputResult = "";
       inputValue.value = "";
       inputError.textContent = "A task can contain only letters and numbers";
@@ -29,21 +29,22 @@ const todo = (function () {
     if (inputResult.trim() === "") return;
 
     addTask(inputResult);
-    loadTask();
 
     inputResult = "";
     inputValue.value = "";
   });
 
-  // Function to add a task
-  function addTask(taskContent, index) {
-    const taskId = Date.now()
+  function addTask(taskContent) {
+    const taskId = Date.now();
     const elements = addElement();
-    taskList.push({ id:taskId, taskName: taskContent});
+    elements.newLi.innerHTML = taskContent;
+    appendElement(elements);
+    taskList.push({ id: taskId, taskName: taskContent });
     localStorage.setItem("taskList", JSON.stringify(taskList));
 
     elements.treshButton.addEventListener("click", () => {
-      removeTask(elements.newLi, taskList.id);
+      console.log("taskID", taskId);
+      removeTask(elements.newLi, taskId);
     });
 
     elements.checkButton.addEventListener("click", () => {
@@ -51,15 +52,13 @@ const todo = (function () {
     });
   }
 
-  // Function to remove a task
-  function removeTask(taskElement, taskContent) {
-    taskList = taskList.filter((item) => item.id !== taskContent);
-      localStorage.setItem("taskList", JSON.stringify(taskList));
-        taskElement.parentNode.removeChild(taskElement);
-        UpdateTaskDoneTitle(doneTodoList);
+  function removeTask(taskElement, taskId) {
+    taskList = taskList.filter((item) => item.id !== taskId);
+    localStorage.setItem("taskList", JSON.stringify(taskList));
+    taskElement.parentNode.removeChild(taskElement);
+    UpdateTaskDoneTitle(doneTodoList);
   }
 
-  // Function to mark a task as done
   function markTaskAsDone(taskElement, checkButton) {
     taskElement.classList.add("opacity-25");
     doneTodoList.push(taskElement);
@@ -68,31 +67,27 @@ const todo = (function () {
     UpdateTaskDoneTitle(doneTodoList);
   }
 
-  // Load tasks from localStorage
-  const loadTask = () => {
+  const loadTasks = () => {
     taskList.forEach((task) => {
       const elements = addElement();
       elements.newLi.innerHTML = task.taskName;
       appendElement(elements);
-  
+
       elements.treshButton.addEventListener("click", () => {
         removeTask(elements.newLi, task.id);
       });
-  
+
       elements.checkButton.addEventListener("click", () => {
         markTaskAsDone(elements.newLi, elements.checkButton);
       });
     });
-
-  }
+  };
 
   if (!localStorage.getItem("taskList")) {
     localStorage.setItem("taskList", JSON.stringify([]));
   }
 
-  loadTask()
-  
+  loadTasks();
+
   DateOnWebsite();
 })();
-
-// localStorage.clear()
