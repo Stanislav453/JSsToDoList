@@ -1,20 +1,23 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const isProduction = process.env.NODE_ENV == "production";
 
 module.exports = {
-  mode: "development",
+  mode: isProduction === "production" ? "production" : "development",
   entry: {
     bundle: path.resolve(__dirname, "src/script/index.js"),
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name][contenthash].js",
+    filename: "index.js",
   },
   module: {
     rules: [
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
+        test: /\.(css)$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
     ],
   },
@@ -22,6 +25,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: path.resolve(__dirname, "./dist/index.html"),
       template: path.resolve(__dirname, "src/index.html"),
+    }),
+    new MiniCssExtractPlugin({
+      filename: "css/output.css",
     }),
   ],
   devServer: {

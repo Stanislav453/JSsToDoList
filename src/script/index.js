@@ -1,3 +1,4 @@
+import "../css/output.css"
 import { CreateElement } from "./CreateElement.js";
 import { UpdateTaskDoneTitle } from "./UpdateTaskDoneTitle.js";
 import DateOnWebsite from "./DateOnWebsite.js";

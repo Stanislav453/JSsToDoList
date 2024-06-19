@@ -3,18 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./css/output.css" />
   </head>
   <body class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
     <section class="md:container mx-auto p-3">
       <header class="flex flex-col items-center gap-3">
-        <h1 class="text-headerSize uppercase text-mainFontColor ">
+        <h1 class="text-headerSize uppercase text-mainFontColor">
           just do it!
         </h1>
-        <form class="relative w-full max-w-4xl flex justify-center" action="" method="get">
-          <p id="inpurError" class="absolute top-inputErrorPosition left-0 text-rose-600 drop-shadow" ></p>
-          <input id="input_value" class="w-full max-w-4xl px-2" type="text" name="text" />
+        <form
+          class="relative w-full max-w-4xl flex justify-center"
+          action=""
+          method="get"
+        >
+          <p
+            id="inpurError"
+            class="absolute top-inputErrorPosition left-0 text-rose-600 drop-shadow"
+          ></p>
+          <input
+            id="input_value"
+            class="w-full max-w-4xl px-2"
+            type="text"
+            name="text"
+          />
           <button
             id="set_input_button"
             class="px-4 py-2 font-bold uppercase text-mainFontColor text-nowrap bg-orange-500 hover:bg-purple-500 transition-colors"
@@ -25,10 +40,15 @@
         </form>
       </header>
       <article class="w-full max-w-4xl mx-auto">
-        <ul id="task-manage" class="flex flex-col gap-1 pt-5" ></ul>
-        <h3 id="task-done-title" class="text-white font-bold capitalize pt-5 pb-2"></h3>
-        <ul id="task-done" ></ul>
-        <p id="time" class="w-full text-timeSize text-center text-white">time</p>
+        <ul id="task-manage" class="flex flex-col gap-1 pt-5"></ul>
+        <h3
+          id="task-done-title"
+          class="text-white font-bold capitalize pt-5 pb-2"
+        ></h3>
+        <ul id="task-done" class="flex flex-col gap-1"></ul>
+        <p id="time" class="w-full text-timeSize text-center text-white">
+          time
+        </p>
       </article>
     </section>
     <!-- <script src="./script/index.js" type="module"></script> -->
