@@ -11,7 +11,7 @@ const todo = (function () {
 
   let inputResult = "";
   let taskList = JSON.parse(localStorage.getItem("taskList")) || [];
-  const doneTodoList = JSON.parse(localStorage.getItem("doneTodoList")) || [];
+  let doneTodoList = JSON.parse(localStorage.getItem("doneTodoList")) || [];
   const { addElement, appendElement } = CreateElement();
 
   inputValue.addEventListener("input", (e) => {
@@ -49,14 +49,16 @@ const todo = (function () {
 
     elements.checkButton.addEventListener("click", () => {
       removeTask(elements.newLi, taskList, "taskList", taskId);
-      markTaskAsDone(elements.newLi, elements.checkButton);
+      markTaskAsDone(
+        elements.newLi,
+        elements.checkButton,
+        elements.treshButton
+      );
     });
   }
 
   function removeTask(taskElement, arrayName, localStorageName, taskId) {
-    console.log(arrayName, localStorageName, taskId);
-
-    const filterArray = arrayName.filter((item) => item.id !== taskId);
+    let filterArray = arrayName.filter((item) => item.id !== taskId);
 
     if (localStorageName === "taskList") {
       taskList = filterArray;
@@ -66,19 +68,29 @@ const todo = (function () {
 
     localStorage.setItem(localStorageName, JSON.stringify(filterArray));
 
-    taskElement.parentNode.removeChild(taskElement);
+    if (taskElement.parentNode) {
+      taskElement.parentNode.removeChild(taskElement);
+    }
+
     UpdateTaskDoneTitle(doneTodoList);
   }
 
-  function markTaskAsDone(taskElement, checkButton) {
-    const donTtaskId = Date.now();
+  function markTaskAsDone(taskElement, checkButton, treshButton) {
+    const markTaskId = Date.now();
     taskElement.classList.add("opacity-25");
 
-    doneTodoList.push({ id: donTtaskId, taskName: taskElement.textContent });
+    doneTodoList.push({ id: markTaskId, taskName: taskElement.textContent });
     localStorage.setItem("doneTodoList", JSON.stringify(doneTodoList));
 
     taskDone.appendChild(taskElement);
-    checkButton.parentNode.removeChild(checkButton);
+    if (checkButton.parentNode) {
+      checkButton.parentNode.removeChild(checkButton);
+    }
+
+    treshButton.addEventListener("click", () => {
+      removeTask(taskElement, doneTodoList, "doneTodoList", markTaskId);
+    });
+
     UpdateTaskDoneTitle(doneTodoList);
   }
 
@@ -94,7 +106,11 @@ const todo = (function () {
 
       elements.checkButton.addEventListener("click", () => {
         removeTask(elements.newLi, taskList, "taskList", task.id);
-        markTaskAsDone(elements.newLi, task.id, elements.checkButton);
+        markTaskAsDone(
+          elements.newLi,
+          elements.checkButton,
+          elements.treshButton
+        );
       });
     });
   };
