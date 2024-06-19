@@ -23,7 +23,7 @@ module.exports = {
         formButtonColor: "bg-orange-500",
       },
       spacing: {
-        "inputErrorPosition": "-25px",
+        inputErrorPosition: "-25px",
       },
     },
   },
