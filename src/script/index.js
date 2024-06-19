@@ -7,10 +7,11 @@ const todo = (function () {
   const setInputButton = document.querySelector("#set_input_button");
   const taskDone = document.querySelector("#task-done");
   const inputError = document.querySelector("#inpurError");
+  const taskManage = document.querySelector("#task-manage");
 
   let inputResult = "";
   let taskList = JSON.parse(localStorage.getItem("taskList")) || [];
-  const doneTodoList = [];
+  const doneTodoList = JSON.parse(localStorage.getItem("doneTodoList")) || [];
   const { addElement, appendElement } = CreateElement();
 
   inputValue.addEventListener("input", (e) => {
@@ -38,30 +39,44 @@ const todo = (function () {
     const taskId = Date.now();
     const elements = addElement();
     elements.newLi.innerHTML = taskContent;
-    appendElement(elements);
+    appendElement(elements, taskManage);
     taskList.push({ id: taskId, taskName: taskContent });
     localStorage.setItem("taskList", JSON.stringify(taskList));
 
     elements.treshButton.addEventListener("click", () => {
-      console.log("taskID", taskId);
-      removeTask(elements.newLi, taskId);
+      removeTask(elements.newLi, taskList, "taskList", taskId);
     });
 
     elements.checkButton.addEventListener("click", () => {
+      removeTask(elements.newLi, taskList, "taskList", taskId);
       markTaskAsDone(elements.newLi, elements.checkButton);
     });
   }
 
-  function removeTask(taskElement, taskId) {
-    taskList = taskList.filter((item) => item.id !== taskId);
-    localStorage.setItem("taskList", JSON.stringify(taskList));
+  function removeTask(taskElement, arrayName, localStorageName, taskId) {
+    console.log(arrayName, localStorageName, taskId);
+
+    const filterArray = arrayName.filter((item) => item.id !== taskId);
+
+    if (localStorageName === "taskList") {
+      taskList = filterArray;
+    } else if (localStorageName === "doneTodoList") {
+      doneTodoList = filterArray;
+    }
+
+    localStorage.setItem(localStorageName, JSON.stringify(filterArray));
+
     taskElement.parentNode.removeChild(taskElement);
     UpdateTaskDoneTitle(doneTodoList);
   }
 
   function markTaskAsDone(taskElement, checkButton) {
+    const donTtaskId = Date.now();
     taskElement.classList.add("opacity-25");
-    doneTodoList.push(taskElement);
+
+    doneTodoList.push({ id: donTtaskId, taskName: taskElement.textContent });
+    localStorage.setItem("doneTodoList", JSON.stringify(doneTodoList));
+
     taskDone.appendChild(taskElement);
     checkButton.parentNode.removeChild(checkButton);
     UpdateTaskDoneTitle(doneTodoList);
@@ -71,23 +86,40 @@ const todo = (function () {
     taskList.forEach((task) => {
       const elements = addElement();
       elements.newLi.innerHTML = task.taskName;
-      appendElement(elements);
+      appendElement(elements, taskManage);
 
       elements.treshButton.addEventListener("click", () => {
-        removeTask(elements.newLi, task.id);
+        removeTask(elements.newLi, taskList, "taskList", task.id);
       });
 
       elements.checkButton.addEventListener("click", () => {
-        markTaskAsDone(elements.newLi, elements.checkButton);
+        removeTask(elements.newLi, taskList, "taskList", task.id);
+        markTaskAsDone(elements.newLi, task.id, elements.checkButton);
       });
     });
   };
 
-  if (!localStorage.getItem("taskList")) {
+  if (
+    !localStorage.getItem("taskList") ||
+    !localStorage.getItem("doneTodoList")
+  ) {
     localStorage.setItem("taskList", JSON.stringify([]));
+    localStorage.setItem("doneTodoList", JSON.stringify([]));
   }
 
-  loadTasks();
+  doneTodoList.forEach((oneTask) => {
+    const elements = addElement();
+    elements.newLi.innerHTML = oneTask.taskName;
 
+    appendElement(elements, taskDone);
+    elements.newLi.classList.add("opacity-25");
+    UpdateTaskDoneTitle(doneTodoList);
+
+    elements.treshButton.addEventListener("click", () => {
+      removeTask(elements.newLi, doneTodoList, "doneTodoList", oneTask.id);
+    });
+  });
+
+  loadTasks();
   DateOnWebsite();
 })();

@@ -28,8 +28,8 @@ export const CreateElement = () => {
     };
   };
 
-  const appendElement = (elements) => {
-    taskManage.appendChild(elements.newLi);
+  const appendElement = (elements, perrent) => {
+    perrent.appendChild(elements.newLi);
     elements.newLi.appendChild(elements.buttonContainer);
     elements.buttonContainer.appendChild(elements.checkButton);
     elements.buttonContainer.appendChild(elements.treshButton);
